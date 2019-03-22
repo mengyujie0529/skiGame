@@ -16,25 +16,23 @@ pygame.mixer.music.play()#播放音乐
 window.fill([255,255,255])#改变背景色
 
 #让小人动起来
-x = 185#小人x坐标
+x = 20#小人x坐标
 y = 20
+speed = 5
 window.blit(skier,(x,y))
-for i in range(1,100):
+for i in range(1,400):
     pygame.time.delay(20)
     pygame.draw.rect(window,[255,255,255],[x,y,30,64])
-    x+=5
-    y+=5
-    window.blit(skier,(x,y))
+    x += speed
+    if x >= window.get_width()-30 or x < 0:
+        speed =- speed
+
+    window.blit(skier, (x, y))
     pygame.display.flip()
-
-
 
 while True:
     #window.blit(image,(0,0))#把图片添加到画布
     # window.blit(skier,(x,y))
-
-
-
     for obj in pygame.event.get():
         if obj.type == pygame.QUIT:#关闭窗口
             print("退出")
