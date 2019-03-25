@@ -29,10 +29,7 @@ class SkierClass(pygame.sprite.Sprite):
         elif self.rect.top<0 or self.rect.bottom>600:
             self.speed[1] = -self.speed[1]
 
-#创建1个小人
-ski=SkierClass('./pic/skier_down.png',[300,10],[20,20])
-ski.move()
-window.blit(ski.image,ski.rect)
+
 
 #树
 class Tree(pygame.sprite.Sprite):
@@ -75,25 +72,16 @@ for objFlag in flagList:
 
 
 
-while True:
-    for obj in pygame.event.get():
-        if obj.type == pygame.QUIT:#关闭窗口
-            print("退出")
-            exit()
-        # elif obj.type == pygame.KEYDOWN:
-        #     if obj.key==pygame.K_a or obj.key==pygame.K_LEFT:
-        #         print("向左")
-        #         x=x-1
-        #         #skier=skier_images[2]
-        #     elif obj.key==pygame.K_s or obj.key==pygame.K_DOWN:
-        #         print("向下")
-        #         y=y+1
-        #         #skier = skier_images[1]
-        #     elif obj.key==pygame.K_d or obj.key==pygame.K_RIGHT:
-        #         print("向右")
-        #         x=x+1
-        #         #skier = skier_images[4]
+if __name__ == '__main__':
+    # 创建1个小人
+    ski = SkierClass('./pic/skier_down.png', [300, 10], [20, 20])
 
-
-
-    pygame.display.update() #刷新  *必须要刷新，不然就不会显示
+    while True:
+        for obj in pygame.event.get():
+            if obj.type == pygame.QUIT:  # 关闭窗口
+                print("退出")
+                exit()
+        window.fill([255,255,255])
+        ski.move()
+        window.blit(ski.image, ski.rect)
+        pygame.display.update()  # 刷新  *必须要刷新，不然就不会显示
