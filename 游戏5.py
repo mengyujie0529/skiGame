@@ -6,14 +6,14 @@ window=pygame.display.set_mode((600,600))#设置画布大小（x，y）表示宽
 window.fill([255,255,255])#改变背景色
 
 
-imageDown=pygame.image.load('skier_down.png').convert()
-imageCrash=pygame.image.load('skier_crash.png').convert()
-imageLeft1=pygame.image.load('skier_left1.png').convert()
-imageLeft2=pygame.image.load('skier_left2.png').convert()
-imageRight1=pygame.image.load('skier_right1.png').convert()
-imageRight2=pygame.image.load('skier_right2.png').convert()
-imageTree=pygame.image.load('skier_tree.png').convert()
-imageFlag=pygame.image.load('skier_flag.png').convert()
+imageDown=pygame.image.load('./pic/skier_down.png').convert()
+imageCrash=pygame.image.load('./pic/skier_crash.png').convert()
+imageLeft1=pygame.image.load('./pic/skier_left1.png').convert()
+imageLeft2=pygame.image.load('./pic/skier_left2.png').convert()
+imageRight1=pygame.image.load('./pic/skier_right1.png').convert()
+imageRight2=pygame.image.load('./pic/skier_right2.png').convert()
+imageTree=pygame.image.load('./pic/skier_tree.png').convert()
+imageFlag=pygame.image.load('./pic/skier_flag.png').convert()
 
 
 #动画精灵
@@ -86,22 +86,22 @@ class Flag(pygame.sprite.Sprite):
 if __name__ == '__main__':
 
     # 创建1个小人
-    ski = SkierClass('./skier_down.png', [300, 10], [0, 0])
+    ski = SkierClass('./pic/skier_down.png', [300, 10], [0, 0])
     #创建多棵树
     treeGroup=pygame.sprite.Group()
     for a in range(0, 6):
         x = random.randint(0, window.get_width() - 42)
         y = random.randint(0, window.get_height() - 48)
-        tree = Tree('./skier_tree.png', [x, y],[0,1])
+        tree = Tree('./pic/skier_tree.png', [x, y],[0,1])
         treeGroup.add(tree)
 
 
     # 创建多个旗子
-    flagGroup=pygame.sprite.Group()
+    flagGroup=pygame.sprite.Group()#创建精灵组
     for n in range(0, 10):
         x = random.randint(0, window.get_width() - 12)
         y = random.randint(0, window.get_height() - 24)
-        flag = Flag('./skier_flag.png', [x, y],[0,1])
+        flag = Flag('./pic/skier_flag.png', [x, y],[0,1])
         flagGroup.add(flag)
     while True:
         pygame.time.delay(2)
@@ -119,12 +119,15 @@ if __name__ == '__main__':
             objTree.move()
             window.blit(objTree.image, objTree.rect)
             # 判断树是否超出范围
-
-
-            if tree.rect.bottom < 0:
-                treeGroup.remove(self)
-                while len(treeGroup)%6 !=0:
-                    treeGroup.add(tree)
+            if objTree.rect.bottom < 0:
+                treeGroup.remove(objTree)
+                print('1.,',treeGroup)
+                x2 = random.randint(0, 600)
+                y2 = random.randint(0, 1200)
+                tree2=Tree('./pic/skier_tree.png', [x2, y2],[0,1])
+                treeGroup.add(tree2)
+                print("2.",treeGroup)
+                window.blit(objTree.image, objTree.rect)
         #加载多个旗子
         for objFlag in flagGroup:
             objFlag.move()
@@ -133,6 +136,8 @@ if __name__ == '__main__':
     #检测人和树是否碰撞
         if pygame.sprite.spritecollide(ski,treeGroup,True):
             ski.image = imageCrash
-
+        #检测人和旗子是否碰撞
+        if pygame.sprite.spritecollide(ski,flagGroup,True):
+            pass
 
         pygame.display.update()  # 刷新  *必须要刷新，不然就不会显示
