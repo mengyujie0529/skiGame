@@ -30,12 +30,12 @@ class SkierClass(pygame.sprite.Sprite):
         self.rect.top = location[1]#设置图像的初始位置
         self.speed=speed
     def move(self):
-        # self.rect = self.rect.move(self.speed)
         isPress = pygame.key.get_pressed()  # bool :True
         if isPress[pygame.K_a] == True or isPress[pygame.K_LEFT] == True:
             if self.rect.left>0:
                 self.rect.left -= 1
                 self.image = imageLeft1
+
         elif isPress[pygame.K_s] == True or isPress[pygame.K_DOWN] == True:
             if self.rect.bottom < window.get_height() - 64:
                 self.rect.bottom += 1
@@ -101,16 +101,15 @@ def collide_check():
     global group
     for obj in group:
         if obj.type == 'tree':
-            if pygame.sprite.collide_rect(ski , obj) :
+            if pygame.sprite.collide_rect(ski , obj) :#人撞到树，切换图片，扣分
                 ski.image = imageCrash
+                group.remove(obj)
                 score -= 100
-                print(score)
         else:
-            if pygame.sprite.collide_rect(ski , obj) :
-                ski.image = imageDown
+            if pygame.sprite.collide_rect(ski , obj) :#人撞到旗，不切图片，加分
                 group.remove(obj)
                 score += 10
-                print(score)
+
 
 #显示文字
 # def ShowFont():
@@ -123,41 +122,32 @@ def collide_check():
 if __name__ == '__main__':
     #设置帧,创建了一个时间对象
     clock = pygame.time.Clock()
-
     position = 0
     score = 0
     # 创建1个小人
     ski = SkierClass('./pic/skier_down.png', [300, 10], [0, 0])
     #创建多棵树和旗子
     group=pygame.sprite.Group()
-
-
     create_obstacle()
-
     while True:
         clock.tick(400)
         for obj in pygame.event.get():
             if obj.type == pygame.QUIT:  # 关闭窗口
                 exit()
-
-
         position += 1
         if position >= 600:
             create_obstacle()
             position=0
-
         # 加载分数
         # ShowFont()
-        myFont = pygame.font.Font("./abc.TTF", 60)
+        myFont = pygame.font.Font("./abc.TTF", 30)
         red = (255, 0, 0)
         text = myFont.render('Score:%d' % score, False, red)
         window.blit(text, (10, 10))
 
-
-        create_ski()
-        ski.move()
+        create_ski()#创建人
+        ski.move()#人移动
         group.update()#树旗移动
-        collide_check()
-
-        draw_win()
+        collide_check()#碰撞检测
+        draw_win()#调用函数，绘制图片
         pygame.display.update()  # 刷新  *必须要刷新，不然就不会显示
